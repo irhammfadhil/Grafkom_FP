@@ -45,14 +45,6 @@ sun.shadow.mapSize.height = 256;
 sun.shadow.camera.near = 0.5;
 sun.shadow.camera.far = 50 ;
 
-function update(){
-    //animate
-    hero.rotation.x += 0.01;
-    hero.rotation.y += 0.01;
-    render();
-	requestAnimationFrame(update);//request next update
-}
-
 function animate() {
 	requestAnimationFrame( animate )
 	hero.rotation.x += 0.01;
