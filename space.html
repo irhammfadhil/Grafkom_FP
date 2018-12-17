@@ -3,7 +3,7 @@
 <html>
 
 <head>
-    <title>Snowy Slime Adventure</title>
+    <title>Space Ball Adventure</title>
     <script type="text/javascript" src="three.js"></script>
     <script type="text/javascript" src="three.min.js"></script>
     <script type="text/javascript" src="stats.js"></script>
@@ -206,7 +206,9 @@ function createScene(){
     addHero();
     addLight();
     addExplosion();
-    
+    //addMoon();
+    addMars();
+    addVenus();
     camera.position.z = 6.75;
     camera.position.y = 2.75;
     /*orbitControl = new THREE.OrbitControls( camera, renderer.domElement );//helper to rotate around in scene
@@ -270,6 +272,28 @@ function loop() {
          renderer.render( scene, camera );
 
 }
+
+function addMars(){
+    var marsTexture = new THREE.TextureLoader().load('mars.jpg')
+    var marsGeometry = new THREE.SphereGeometry( 1.25, 12, 12 );
+    var marsMaterial = new THREE.MeshBasicMaterial( {map: marsTexture, color: 0xffffff} );
+    var sphere = new THREE.Mesh( marsGeometry, marsMaterial );
+    scene.add(sphere)
+    sphere.position.x = 5;
+    sphere.position.y = 6;
+    sphere.position.z = 0;
+}
+
+function addVenus(){
+    var marsTexture = new THREE.TextureLoader().load('venus.jpg')
+    var marsGeometry = new THREE.SphereGeometry( 1.25, 12, 12 );
+    var marsMaterial = new THREE.MeshBasicMaterial( {map: marsTexture, color: 0xffffff} );
+    var sphere = new THREE.Mesh( marsGeometry, marsMaterial );
+    scene.add(sphere)
+    sphere.position.x = -5;
+    sphere.position.y = 6;
+    sphere.position.z = 0;
+}
 function addExplosion(){
     particleGeometry = new THREE.Geometry();
     for (var i = 0; i < particleCount; i ++ ) {
@@ -277,7 +301,7 @@ function addExplosion(){
         particleGeometry.vertices.push( vertex );
     }
     var pMaterial = new THREE.ParticleBasicMaterial({
-      color: 0xfffafa,
+      color: 0xffff00,
       size: 0.2
     });
     particles = new THREE.Points( particleGeometry, pMaterial );
@@ -330,7 +354,7 @@ function handleKeyDown(keyEvent){
 }
 function addHero(){
     var sphereGeometry = new THREE.SphereGeometry( heroRadius, 10, 10 );
-    var sphereMaterial = new THREE.MeshStandardMaterial( { color: 0xFFFFFF , emissive: 0x555555 , shading:THREE.FlatShading} )
+    var sphereMaterial = new THREE.MeshStandardMaterial( { map: new THREE.TextureLoader().load('earth.jpg'), color: 0xffffff , emissive: 0x555555} )
     //var sphereMaterial = new THREE.MeshBasicMaterial();
     //sphereMaterial.wireframe = true;
     jumping=false;
@@ -497,38 +521,43 @@ function addTree1(inPath, row, isLeft){
     rollingGroundSphere.add(newTree);
 }
 function createTree(){
-    var sides=8;
-    var tiers=6;
+    /*var sides=8;
+    var tiers=6;*/
     
-    var snowMaterial = new THREE.MeshStandardMaterial( { color: 0xFFFFFF, emissive: 0x555555, shading:THREE.SmoothShading  } );
-    var blackMat = new THREE.MeshStandardMaterial( { color: 0x111111, shading:THREE.SmoothShading  } );
+    var batu = new THREE.MeshStandardMaterial( { map: new THREE.TextureLoader().load('earth.jpg')} );
+    var jupiter = new THREE.MeshStandardMaterial( { map: new THREE.TextureLoader().load('jupiter.jpg'), color: 0xffffff} );
+    /*var blackMat = new THREE.MeshStandardMaterial( { color: 0x111111, shading:THREE.SmoothShading  } );
     var rendaMat = new THREE.MeshStandardMaterial( { color: 0xDD1111, shading:THREE.SmoothShading  } );
-    var noseMat = new THREE.MeshStandardMaterial( { color: 0xFF9800, shading:THREE.SmoothShading  } );
+    var noseMat = new THREE.MeshStandardMaterial( { color: 0xFF9800, shading:THREE.SmoothShading  } );*/
 
     var headGeometry = new THREE.SphereGeometry( 0.2, 10, 10 ); 
-    var head = new THREE.Mesh( headGeometry, snowMaterial );
-    head.position.y=0.85;
+    var head = new THREE.Mesh( headGeometry, batu);
+    head.position.y=0.5;
 
- 
+    var jupiterGeometry = new THREE.SphereGeometry( 0.2, 10, 10 );
+    var jupiterHead = new THREE.Mesh( jupiterGeometry, jupiter);
+    jupiterHead.position.x = 0.2;
+    jupiterHead.position.y = 0.75;
 
-    var bodyGeometry = new THREE.SphereGeometry( 0.25, 10, 10 );
-    var body = new THREE.Mesh( bodyGeometry, snowMaterial );
-    body.position.y=0.7;
-
-    var bokongGeometry = new THREE.SphereGeometry( 0.35, 5, 10 ); 
-    var bokong = new THREE.Mesh( bokongGeometry, snowMaterial );
-    bokong.position.y=0.45;
-
-
-    var snowman = new THREE.Object3D();
+    var bumi = new THREE.Object3D();
   
-    snowman.add(bokong);
+    //snowman.add(bokong);
+    bumi.add(head)
+    bumi.add(jupiterHead)
 
-    return snowman;
+    return bumi;
 }
 
 function createTree1(){
-    var sides=8;
+    /*var jupiter = new THREE.MeshStandardMaterial( { map: new THREE.TextureLoader().load('jupiter.jpg')} );
+    var saturn  = new THREE.MeshStandardMaterial( { map: new THREE.TextureLoader().load('uranus.jpg')} );
+    var jupiterGeometry = new THREE.SphereGeometry( 0.2, 10, 10 );
+    var jupiterHead = new THREE.Mesh( jupiterGeometry, jupiter);
+    jupiterHead.position.y = 1;
+    var planet = new THREE.Object3D();
+    planet.add(jupiter);
+    return planet;*/
+    var sides=10;
     var tiers=6;
     var scalarMultiplier=(Math.random()*(0.25-0.1))+0.05;
     var midPointVector= new THREE.Vector3();
@@ -642,7 +671,8 @@ function doTreeLogic(){
         }else{//check collision
             if(treePos.distanceTo(heroSphere.position)<=0.6){
                 console.log("hit");
-
+                score = score-2;
+                if (score < 0) score=0;
                 if (life <= 0) {
                 		hasCollided=true;
                 	}
@@ -744,5 +774,10 @@ function onWindowResize() {
     camera.updateProjectionMatrix();
 }
 </script>
+
+<script>
+<button onclick="location.reload();">Refresh Page</button>
+</script>
+
 </body>
 </html>
